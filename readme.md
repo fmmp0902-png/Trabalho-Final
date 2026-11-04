@@ -95,7 +95,18 @@ function issSimulada() {
   issLat = 51.6 * sin(fase);              
   issLon = (fase % 360) - 180;  
 }
-````
+```
 
+Sempre que a ISS muda de posição, a function `destacarISS()` percorre todos os pontos. Primeiro multiplica o brilho de cada ponto por `DURACAO_RASTO`, o que faz o brilho enfraquecer um pouco e é o que cria o rasto. Depois calcula a distância do ponto à ISS com `distancia()` e, se for menor do que `RAIO_ISS`, o brilho passa a ser o maior entre o valor atual e `1 - d / RAIO_ISS`, de modo que quanto mais perto da ISS, mais brilho.
+
+```javascript
+function destacarISS() {
+  for (const p of pontos) {
+    p.brilho *= DURACAO_RASTO;
+    const d = distancia(p.lat, p.lon, issLat, issLon);
+    if (d < RAIO_ISS) p.brilho = max(p.brilho, 1 - d / RAIO_ISS);
+  }
+}
+```
 
 ## Referências
