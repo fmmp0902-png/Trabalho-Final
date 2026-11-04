@@ -60,6 +60,12 @@ function atualizarISS() {
     });
 }
 
+function issSimulada() {
+  const fase = millis() / 1000 * 0.97;
+  issLat = 51.6 * sin(fase);              
+  issLon = (fase % 360) - 180;  
+}
+
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
