@@ -135,5 +135,25 @@ function vetor(lat, lon) {
 }
 ```
 
+A `juntarTrajetoria(lista, lat, lon, dia)` junta uma posição á trajetória. Se a nova posição ficar longe da anterior, preenche o caminho com pontos intermédios, o número de passos é a distância dividida por 2 e arredondada para cima com o `ceil()``, ou seja, um ponto por cada 2 graus. Cada ponto intermédio é calculado com o `lerp()` aplicado a x, y e z de `vetor()`, e depois volta a ser posto na superfície da esfera, dividindo pelo comprimento do vetor (`tamanho`, calculado com `sqrt()`). A latitude e a longitude são recuperados com `asin()` e `atan2()`. O valor de dia também é misturado com o `lerp()`, para a cor mudar de forma grafualmente. No fim, o `splice()` mantém só as 1500 posições mais recentes.
+
+```javascript
+function juntarTrajetoria(lista, lat, lon, dia) {
+  const ant = lista[lista.length - 1];
+  if (ant) {
+    const passos = ceil(distancia(ant.lat, ant.lon, lat, lon) / 2);
+    const a = vetor(ant.lat, ant.lon);
+    const b = vetor(lat, lon);
+    for (let k = 1; k < passos; k++) {
+      const t = k / passos;
+      const x = lerp(a[0], b[0], t), y = lerp(a[1], b[1], t), z = lerp(a[2], b[2], t);
+      const tamanho = sqrt(x * x + y * y + z * z);
+      lista.push({ lat: asin(y / tamanho), lon: atan2(x, z), dia: lerp(ant.dia, dia, t) });
+    }
+  }
+  lista.push({ lat: lat, lon: lon, dia: dia });
+  if (lista.length > 1500) lista.splice(0, lista.length - 1500);      
+}
+````
 
 ## Referências
