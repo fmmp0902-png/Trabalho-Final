@@ -124,3 +124,16 @@ async function carregarHistorico() {
   for (const p of trajetoria) juntarTrajetoria(historico, p.lat, p.lon, p.dia);
   trajetoria = historico;
 }
+
+function draw() {
+  background(5, 7, 15);
+  giro += 0.08;
+  agora = millis();
+  cosInc = cos(inclinacao);
+  sinInc = sin(inclinacao);
+  const raio = min(width, height) * 0.38;
+  desenharEstrelas(raio);
+  for (const p of pontos) desenharPonto(p, raio);
+  desenharTrajetoria(raio);
+  escreverInfo();
+}
