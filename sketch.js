@@ -227,3 +227,8 @@ function mouseDragged() {
   giro += (mouseX - pmouseX) * 0.4;
   inclinacao = constrain(inclinacao - (mouseY - pmouseY) * 0.3, -80, 80);
 }
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
+
