@@ -66,7 +66,10 @@ function issSimulada() {
   issLon = (fase % 360) - 180;  
 }
 
-
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
+function destacarISS() {
+  for (const p of pontos) {
+    p.brilho *= DURACAO_RASTO;
+    const d = distancia(p.lat, p.lon, issLat, issLon);
+    if (d < RAIO_ISS) p.brilho = max(p.brilho, 1 - d / RAIO_ISS);
+  }
 }
