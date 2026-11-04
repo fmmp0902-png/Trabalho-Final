@@ -154,6 +154,29 @@ function juntarTrajetoria(lista, lat, lon, dia) {
   lista.push({ lat: lat, lon: lon, dia: dia });
   if (lista.length > 1500) lista.splice(0, lista.length - 1500);      
 }
-````
+```
+
+A function `carregarHistorico()` é `async` e pede à API os movimentos das últimas 2 horas, um de 3 em 3 minutos, para desenhar o caminho já feito. Como a API aceita no máximo 10 instantes por pedido, o ciclo exterior faz 4 pedidos (`bloco`de 0 a 3) e o ciclo interior cria 10 instantes em cada 180 segundos entre eles, o que dá 40 pontos. Cada pedido usa o `await fetch(...)` com os instantes separados por vírgulas (`join(',')`), e cada ponto recebido é juntado a uma trajetória à parte, o `historico`. Caso ocorra uma falha no pedido, o `try...catch` evita que o erro interrompa o processo, e a trajetória começa a partir da posição atual. Entre pedidos há uma espera de 1.1 segundos com o `setTimeout`, porque a API só permite cerca de 1 pedido por segundo. Entretanto as posições recolhidas são acrescentadas ao histórico e a `trajetoria` passa a ser o `historico`.
+
+```javascript
+async function carregarHistorico() {
+  const historico = [];
+  const inicio = Math.floor(Date.now() / 1000);
+  for (let bloco = 0; bloco < 4; bloco++) {
+    const instantes = [];
+    for (let i = 0; i < 10; i++) instantes.push(inicio - (40 - bloco * 10 - i) * 180);
+    try {
+      const resposta = await fetch('https://api.wheretheiss.at/v1/satellites/25544/positions?timestamps=' + instantes.join(','));
+      const lista = await resposta.json();
+      for (const d of lista) {
+        if (d.latitude !== undefined) juntarTrajetoria(historico, d.latitude, d.longitude, valorDia(d.visibility));
+      }
+    } catch (erro) { }
+    await new Promise(resolve => setTimeout(resolve, 1100));
+  }
+  for (const p of trajetoria) juntarTrajetoria(historico, p.lat, p.lon, p.dia);
+  trajetoria = historico;
+}
+```
 
 ## Referências
