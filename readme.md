@@ -15,5 +15,19 @@ const COR_DIA = [255, 170, 80];
 const COR_NOITE = [90, 140, 255];
 const N_ESTRELAS = 250;
 ```
+A variável `let pontos` guarda todos os pontos da terra, a `let giro`é a rotação do globo á volta do eixo vertical em graus e a `let inclinacao` é a inclinação do globo, que é negativa para se ver o polo norte. A `let issLat`e a `let issLon` são a posição atual do ISS e a ´let issReal` verifica se os dados vieram da API (Application Programming Interface), sendo uma forma de um programa pedir informação a outro programa. A `let agora` guarda o tempo atual, lido uma vez por frame, e a `let consInc` e `let sinInc` guarda o cosseno e o seno da inclinação, calculados também uma vez por frame. A `let trajetoria` guarda as posições da ISS ao longo do tempo, as ´let estrelas`guardam as estrelas do fundo e, por fim, a `let dadosISS` guarda tudo o que a API devolveu e fica a `null` quando a posição é simulada.
+
+```javascript
+let pontos = [];                     
+let giro = 0;                    
+let inclinacao = -20;                
+let issLat = 0, issLon = 0;          
+let issReal = false;                   
+let agora = 0;                         
+let cosInc = 1, sinInc = 0;            
+let trajetoria = [];                   
+let estrelas = [];
+let dadosISS = null; 
+```
 
 ## Referências
