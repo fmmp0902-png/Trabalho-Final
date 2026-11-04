@@ -164,3 +164,8 @@ function desenharPonto(p, raio) {
   ellipse(width / 2 + x * raio, height / 2 + y2 * raio, tamanho, tamanho);
 }
 
+function criarEstrelas() {
+  for (let i = 0; i < N_ESTRELAS; i++) {
+    estrelas.push({ x: random(), y: random(), tam: random(0.8, 2.2), fase: random(360) });
+  }
+}
