@@ -29,5 +29,20 @@ let trajetoria = [];
 let estrelas = [];
 let dadosISS = null; 
 ```
+Na function `setup()` usei o `createCanvas(windowWidth, windowHeight)` para criar a área de trabalho com o tamnho da janela do navegador. O `angleMode(DEGREES)` faz com que o `sin()` e o `cos()` trabalhem em graus, como a latitude e a longitude, e o `noStroke()` tira o contorno aos pontos. Defini o tipo de letra com o `textFont(`Georgia`)` e coloquei `criarPontos()` e `criarEstrelas()` para preparar os dados. Depois coloquei o `carregarHistorico()`, que pede as últimas 2 horas da trajetória e `atualizarISS()`, que pede a posição da ISS atual. O `setInterval(atualizarISS, 5000)` repete este pedido de 5 em 5 segundos.
+
+```javascript
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  angleMode(DEGREES);
+  noStroke();
+  textFont('Georgia');
+  criarPontos();
+  criarEstrelas();
+  carregarHistorico();
+  atualizarISS();
+  setInterval(atualizarISS, 5000);
+}
+````
 
 ## Referências
