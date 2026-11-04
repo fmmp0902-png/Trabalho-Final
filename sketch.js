@@ -73,3 +73,8 @@ function destacarISS() {
     if (d < RAIO_ISS) p.brilho = max(p.brilho, 1 - d / RAIO_ISS);
   }
 }
+
+function distancia(lat1, lon1, lat2, lon2) {
+  const c = sin(lat1) * sin(lat2) + cos(lat1) * cos(lat2) * cos(lon1 - lon2);
+  return acos(constrain(c, -1, 1));
+}
