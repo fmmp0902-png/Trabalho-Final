@@ -169,3 +169,13 @@ function criarEstrelas() {
     estrelas.push({ x: random(), y: random(), tam: random(0.8, 2.2), fase: random(360) });
   }
 }
+
+function desenharEstrelas(raio) {
+  for (const e of estrelas) {
+    const x = e.x * width;
+    const y = e.y * height;
+    if (dist(x, y, width / 2, height / 2) < raio) continue;
+    fill(210, 220, 255, 120 + 100 * sin(agora * 0.05 + e.fase));
+    ellipse(x, y, e.tam, e.tam);
+  }
+}
