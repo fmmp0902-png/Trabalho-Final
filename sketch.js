@@ -17,10 +17,16 @@ let cosInc = 1, sinInc = 0;
 let trajetoria = [];                   
 let estrelas = []; 
 
-
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  background(255, 45, 200);
+  angleMode(DEGREES);
+  noStroke();
+  textFont('Georgia');
+  criarPontos();
+  criarEstrelas();
+  carregarHistorico();
+  atualizarISS();
+  setInterval(atualizarISS, 5000);
 }
 
 function draw() {
