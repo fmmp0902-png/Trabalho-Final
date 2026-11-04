@@ -29,8 +29,10 @@ function setup() {
   setInterval(atualizarISS, 5000);
 }
 
-function draw() {
-  circle(mouseX, mouseY, 60);
+function criarPontos() {
+  adicionar(OCEANO, 0);
+  adicionar(TERRA, 1);
+  adicionar(FRONTEIRAS, 2);
 }
 
 function windowResized() {
