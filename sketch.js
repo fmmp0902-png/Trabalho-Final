@@ -222,3 +222,8 @@ function escreverInfo() {
   const estado = issReal ? '' : '  (posição simulada)';
   text('ISS · latitude ' + nf(issLat, 1, 2) + '° · longitude ' + nf(issLon, 1, 2) + '°' + estado, 24, height - 24);
 }
+
+function mouseDragged() {
+  giro += (mouseX - pmouseX) * 0.4;
+  inclinacao = constrain(inclinacao - (mouseY - pmouseY) * 0.3, -80, 80);
+}
