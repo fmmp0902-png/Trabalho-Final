@@ -35,6 +35,13 @@ function criarPontos() {
   adicionar(FRONTEIRAS, 2);
 }
 
+function adicionar(lista, tipo) {
+  for (const [lat, lon] of lista) {
+    pontos.push({ lat: lat, lon: lon, tipo: tipo, brilho: 0 });   // brilho: 0 = normal, 1 = mesmo debaixo da ISS
+  }
+}
+
+
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
