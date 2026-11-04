@@ -137,3 +137,30 @@ function draw() {
   desenharTrajetoria(raio);
   escreverInfo();
 }
+
+function desenharPonto(p, raio) {
+
+  const x = cos(p.lat) * sin(p.lon + giro);
+  const y = -sin(p.lat);                         
+  const z = cos(p.lat) * cos(p.lon + giro);      
+
+  const y2 = y * cosInc - z * sinInc;
+  const z2 = y * sinInc + z * cosInc;
+  if (z2 < 0) return;                            
+
+  const pulso = sin(agora * 0.07 + (p.lat + p.lon) * 2);
+  let tamanho = TAMANHO[p.tipo] * (1 + 0.25 * pulso);
+  let [r, g, b] = COR[p.tipo];
+
+  if (p.brilho > 0.02) {
+    tamanho += p.brilho * (6 + 3 * sin(agora * 0.3));
+    r = lerp(r, COR_ISS[0], p.brilho);
+    g = lerp(g, COR_ISS[1], p.brilho);
+    b = lerp(b, COR_ISS[2], p.brilho);
+  }
+
+  tamanho *= (0.4 + 0.6 * z2) * raio / 270;
+  fill(r, g, b, 60 + 195 * z2);
+  ellipse(width / 2 + x * raio, height / 2 + y2 * raio, tamanho, tamanho);
+}
+
