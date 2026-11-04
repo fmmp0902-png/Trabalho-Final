@@ -187,3 +187,33 @@ function projetar(lat, lon, raio) {
   return { x: width / 2 + x * raio, y: height / 2 + (y * cosInc - z * sinInc) * raio, z: y * sinInc + z * cosInc };
 }
 
+function desenharTrajetoria(raio) {
+  const n = trajetoria.length;
+  if (n < 2) return;
+  const escala = raio / 270;
+  const pts = trajetoria.map(p => projetar(p.lat, p.lon, raio));
+
+  blendMode(ADD);                                  
+  for (const [largura, opacidade] of [[4, 0.1], [1.7, 0.3], [0.6, 1]]) {
+    for (let i = 1; i < n; i++) {
+      if (pts[i - 1].z < 0 || pts[i].z < 0) continue;           
+      const idade = i / (n - 1);                                 
+      const d = trajetoria[i].dia;                               
+      stroke(lerp(COR_NOITE[0], COR_DIA[0], d), lerp(COR_NOITE[1], COR_DIA[1], d), lerp(COR_NOITE[2], COR_DIA[2], d),
+             255 * pow(idade, 1.2) * opacidade);                
+      strokeWeight((1.5 + 3 * idade) * largura * escala);        
+      line(pts[i - 1].x, pts[i - 1].y, pts[i].x, pts[i].y);
+    }
+  }
+
+  noStroke();
+  const cabeca = pts[n - 1];                             
+  if (cabeca.z > 0) {
+    const pulso = 1 + 0.2 * sin(agora * 0.3);
+    fill(255, 190, 110, 60);
+    ellipse(cabeca.x, cabeca.y, 18 * escala * pulso, 18 * escala * pulso);
+    fill(255, 245, 225);
+    ellipse(cabeca.x, cabeca.y, 5 * escala, 5 * escala);                    
+  }
+  blendMode(BLEND);
+}
