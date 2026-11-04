@@ -109,4 +109,14 @@ function destacarISS() {
 }
 ```
 
+A function `distancia(lat1, lon1, lat2, lon2)` calcula a distância entre dois pontos da terra, em graus, com a fórmula da distância sobre a esfera. O valor `c` é calculado com senos e cossenos das latitudes e das longitudes, e o `acos()` devolve o ângulo entre os dois pontos. Usei o `constrain(c, -1, 1)` porque o `acos()`só aceita valores entre -1 e 1 e pequenos erros de arredondamento  podiam passar disso.
+
+```javascript
+function distancia(lat1, lon1, lat2, lon2) {
+  const c = sin(lat1) * sin(lat2) + cos(lat1) * cos(lat2) * cos(lon1 - lon2);
+  return acos(constrain(c, -1, 1));
+}
+```
+
+
 ## Referências
