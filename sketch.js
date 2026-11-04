@@ -85,3 +85,7 @@ function valorDia(visibilidade) {
   return 0.5;
 }
 
+function vetor(lat, lon) {
+  return [cos(lat) * sin(lon), sin(lat), cos(lat) * cos(lon)];
+}
+
