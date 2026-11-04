@@ -192,7 +192,6 @@ function desenharTrajetoria(raio) {
   if (n < 2) return;
   const escala = raio / 270;
   const pts = trajetoria.map(p => projetar(p.lat, p.lon, raio));
-
   blendMode(ADD);                                  
   for (const [largura, opacidade] of [[4, 0.1], [1.7, 0.3], [0.6, 1]]) {
     for (let i = 1; i < n; i++) {
@@ -205,7 +204,6 @@ function desenharTrajetoria(raio) {
       line(pts[i - 1].x, pts[i - 1].y, pts[i].x, pts[i].y);
     }
   }
-
   noStroke();
   const cabeca = pts[n - 1];                             
   if (cabeca.z > 0) {
@@ -216,4 +214,11 @@ function desenharTrajetoria(raio) {
     ellipse(cabeca.x, cabeca.y, 5 * escala, 5 * escala);                    
   }
   blendMode(BLEND);
+}
+
+function escreverInfo() {
+  fill(200, 215, 255);
+  textSize(13);
+  const estado = issReal ? '' : '  (posição simulada)';
+  text('ISS · latitude ' + nf(issLat, 1, 2) + '° · longitude ' + nf(issLon, 1, 2) + '°' + estado, 24, height - 24);
 }
