@@ -7,6 +7,15 @@ const COR_DIA = [255, 170, 80];
 const COR_NOITE = [90, 140, 255];
 const N_ESTRELAS = 250;
 
+let pontos = [];                     
+let giro = 0;                    
+let inclinacao = -20;                
+let issLat = 0, issLon = 0;          
+let issReal = false;                   
+let agora = 0;                         
+let cosInc = 1, sinInc = 0;            
+let trajetoria = [];                   
+let estrelas = []; 
 
 
 function setup() {
