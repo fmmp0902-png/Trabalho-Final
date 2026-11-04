@@ -105,3 +105,22 @@ function juntarTrajetoria(lista, lat, lon, dia) {
   lista.push({ lat: lat, lon: lon, dia: dia });
   if (lista.length > 1500) lista.splice(0, lista.length - 1500);      
 }
+
+async function carregarHistorico() {
+  const historico = [];
+  const inicio = Math.floor(Date.now() / 1000);
+  for (let bloco = 0; bloco < 4; bloco++) {
+    const instantes = [];
+    for (let i = 0; i < 10; i++) instantes.push(inicio - (40 - bloco * 10 - i) * 180);
+    try {
+      const resposta = await fetch('https://api.wheretheiss.at/v1/satellites/25544/positions?timestamps=' + instantes.join(','));
+      const lista = await resposta.json();
+      for (const d of lista) {
+        if (d.latitude !== undefined) juntarTrajetoria(historico, d.latitude, d.longitude, valorDia(d.visibility));
+      }
+    } catch (erro) { }
+    await new Promise(resolve => setTimeout(resolve, 1100));
+  }
+  for (const p of trajetoria) juntarTrajetoria(historico, p.lat, p.lon, p.dia);
+  trajetoria = historico;
+}
