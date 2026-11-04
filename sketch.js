@@ -245,11 +245,11 @@ function linhasInfo() {
 }
 
 function desenharInfoISS(raio) {
-  const p = projetar(issLat, issLon, raio);                     // posição da ISS no ecrã
-  if (p.z < 0 || dist(mouseX, mouseY, p.x, p.y) > 20) return;   // atrás do globo ou rato longe: não desenha
+  const p = projetar(issLat, issLon, raio);
+  if (p.z < 0 || dist(mouseX, mouseY, p.x, p.y) > 20) return;
   const linhas = linhasInfo();
   const w = 190, h = linhas.length * 20 + 16;
-  const x = min(mouseX + 18, width - w - 10);                   // a caixa não sai do ecrã
+  const x = min(mouseX + 18, width - w - 10);
   const y = min(mouseY + 18, height - h - 10);
   fill(10, 15, 30, 220);
   rect(x, y, w, h, 6);
