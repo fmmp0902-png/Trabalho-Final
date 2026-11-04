@@ -15,7 +15,8 @@ let issReal = false;
 let agora = 0;                         
 let cosInc = 1, sinInc = 0;            
 let trajetoria = [];                   
-let estrelas = []; 
+let estrelas = [];
+let dadosISS = null; 
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -49,10 +50,12 @@ function atualizarISS() {
       issLat = dados.latitude;
       issLon = dados.longitude;
       issReal = true;
+      dadosISS = dados;
       juntarTrajetoria(trajetoria, issLat, issLon, valorDia(dados.visibility));
       destacarISS();
     })
     .catch(() => {
+      dadosISS = null;
       issReal = false;
       issSimulada();
       juntarTrajetoria(trajetoria, issLat, issLon, 0.5);
@@ -136,6 +139,7 @@ function draw() {
   for (const p of pontos) desenharPonto(p, raio);
   desenharTrajetoria(raio);
   escreverInfo();
+  desenharInfoISS(raio);
 }
 
 function desenharPonto(p, raio) {
@@ -221,6 +225,37 @@ function escreverInfo() {
   textSize(13);
   const estado = issReal ? '' : '  (posição simulada)';
   text('ISS · latitude ' + nf(issLat, 1, 2) + '° · longitude ' + nf(issLon, 1, 2) + '°' + estado, 24, height - 24);
+}
+
+function linhasInfo() {
+  if (!dadosISS) {
+    return ['Latitude: ' + nf(issLat, 1, 2) + '°', 'Longitude: ' + nf(issLon, 1, 2) + '°', '(posição simulada)'];
+  }
+  const d = dadosISS;
+  const segundos = Number.isFinite(d.timestamp) ? d.timestamp : Date.now() / 1000;
+  const hora = new Date(segundos * 1000).toLocaleTimeString('pt-PT');
+  return [
+    'Hora: ' + hora,
+    'Altitude: ' + nf(d.altitude, 1, 2) + ' km',
+    'Velocidade: ' + nf(d.velocity, 1, 2) + ' km/h',
+    'Latitude: ' + nf(d.latitude, 1, 4) + '°',
+    'Longitude: ' + nf(d.longitude, 1, 4) + '°',
+    d.visibility === 'eclipsed' ? 'A ISS está de noite' : 'A ISS está de dia'
+  ];
+}
+
+function desenharInfoISS(raio) {
+  const p = projetar(issLat, issLon, raio);                     // posição da ISS no ecrã
+  if (p.z < 0 || dist(mouseX, mouseY, p.x, p.y) > 20) return;   // atrás do globo ou rato longe: não desenha
+  const linhas = linhasInfo();
+  const w = 190, h = linhas.length * 20 + 16;
+  const x = min(mouseX + 18, width - w - 10);                   // a caixa não sai do ecrã
+  const y = min(mouseY + 18, height - h - 10);
+  fill(10, 15, 30, 220);
+  rect(x, y, w, h, 6);
+  fill(220, 230, 255);
+  textSize(13);
+  for (let i = 0; i < linhas.length; i++) text(linhas[i], x + 12, y + 22 + i * 20);
 }
 
 function mouseDragged() {
