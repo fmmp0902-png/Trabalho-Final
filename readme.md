@@ -43,6 +43,57 @@ function setup() {
   atualizarISS();
   setInterval(atualizarISS, 5000);
 }
+```
+
+A function `criarPontos()` serve para chamar três vezes a function `adicionar()`, uma para cada lista de dados (`OCEANO`, `TERRA` e `FRONTEIRAS`), com um número , sendo 0 para o mar, 1 para a terra e 2 para as fronteiras. A function `adicionar(lista, tipo)`percorre cada par `[lat, lon]` da lista com um ciclo `for...of` e guarda um objeto na lista `pontos`, com a latitude, a longitude, o tipo e o `brilho`. O brilho começa a 0, que é o estado normal, e vai até 1, que significa que o ponto está mesmo por baixo da ISS. 
+
+```javascript
+function criarPontos() {
+  adicionar(OCEANO, 0);
+  adicionar(TERRA, 1);
+  adicionar(FRONTEIRAS, 2);
+}
+```
+```javascript
+function adicionar(lista, tipo) {
+  for (const [lat, lon] of lista) {
+    pontos.push({ lat: lat, lon: lon, tipo: tipo, brilho: 0 }); 
+  }
+}
+```
+
+Para obter a posição da ISS usei o `fetch`, que faz pedido à API pública. O primeiro `.then` converte a resposta em dados e o segundo verifica se vieram a latitude e a longitude. Se vieram, guarda-as em `issLat`e `ìssLon`, põe `issReal = True`, guarda a resposta completa em `dadosISS`, junta a posição à trajetória com `juntarTrajetoria()`e chama `destacarISS()`. Se o pedido falhar, o `.cacth` põe `issReal = false` e `dadosISS = null`, calcula uma posição com `issSimulada()` e faz o mesmo, mas com o valor de dia 0.5 que significa desconhecido.
+
+```javascript
+function atualizarISS() {
+  fetch('https://api.wheretheiss.at/v1/satellites/25544')
+    .then(resposta => resposta.json())
+    .then(dados => {
+      if (dados.latitude === undefined) throw 'sem dados';
+      issLat = dados.latitude;
+      issLon = dados.longitude;
+      issReal = true;
+      dadosISS = dados;
+      juntarTrajetoria(trajetoria, issLat, issLon, valorDia(dados.visibility));
+      destacarISS();
+    })
+    .catch(() => {
+      dadosISS = null;
+      issReal = false;
+      issSimulada();
+      juntarTrajetoria(trajetoria, issLat, issLon, 0.5);
+      destacarISS();
+    });
+}
+```
+
+
+```javascript
+function issSimulada() {
+  const fase = millis() / 1000 * 0.97;
+  issLat = 51.6 * sin(fase);              
+  issLon = (fase % 360) - 180;  
+}
 ````
 
 
