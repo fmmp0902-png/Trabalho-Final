@@ -37,8 +37,27 @@ function criarPontos() {
 
 function adicionar(lista, tipo) {
   for (const [lat, lon] of lista) {
-    pontos.push({ lat: lat, lon: lon, tipo: tipo, brilho: 0 });   // brilho: 0 = normal, 1 = mesmo debaixo da ISS
+    pontos.push({ lat: lat, lon: lon, tipo: tipo, brilho: 0 }); 
   }
+}
+
+function atualizarISS() {
+  fetch('https://api.wheretheiss.at/v1/satellites/25544')
+    .then(resposta => resposta.json())
+    .then(dados => {
+      if (dados.latitude === undefined) throw 'sem dados';
+      issLat = dados.latitude;
+      issLon = dados.longitude;
+      issReal = true;
+      juntarTrajetoria(trajetoria, issLat, issLon, valorDia(dados.visibility));
+      destacarISS();
+    })
+    .catch(() => {
+      issReal = false;
+      issSimulada();
+      juntarTrajetoria(trajetoria, issLat, issLon, 0.5);
+      destacarISS();
+    });
 }
 
 
