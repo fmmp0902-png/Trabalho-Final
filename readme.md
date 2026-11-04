@@ -29,7 +29,7 @@ let trajetoria = [];
 let estrelas = [];
 let dadosISS = null; 
 ```
-Na function `setup()` usei o `createCanvas(windowWidth, windowHeight)` para criar a área de trabalho com o tamnho da janela do navegador. O `angleMode(DEGREES)` faz com que o `sin()` e o `cos()` trabalhem em graus, como a latitude e a longitude, e o `noStroke()` tira o contorno aos pontos. Defini o tipo de letra com o `textFont Georgia` e coloquei `criarPontos()` e `criarEstrelas()` para preparar os dados. Depois coloquei o `carregarHistorico()`, que pede as últimas 2 horas da trajetória e `atualizarISS()`, que pede a posição da ISS atual. O `setInterval(atualizarISS, 5000)` repete este pedido de 5 em 5 segundos.
+Na function `setup()` usei o `createCanvas(windowWidth, windowHeight)` para criar a área de trabalho com o tamanho da janela do navegador. O `angleMode(DEGREES)` faz com que o `sin()` e o `cos()` trabalhem em graus, como a latitude e a longitude, e o `noStroke()` tira o contorno aos pontos. Defini o tipo de letra com o `textFont Georgia` e coloquei `criarPontos()` e `criarEstrelas()` para preparar os dados. Depois coloquei o `carregarHistorico()`, que pede as últimas 2 horas da trajetória e `atualizarISS()`, que pede a posição da ISS atual. O `setInterval(atualizarISS, 5000)` repete este pedido de 5 em 5 segundos.
 
 ```javascript
 function setup() {
@@ -109,7 +109,7 @@ function destacarISS() {
 }
 ```
 
-A function `distancia(lat1, lon1, lat2, lon2)` calcula a distância entre dois pontos da terra, em graus, com a fórmula da distância sobre a esfera. O valor `c` é calculado com senos e cossenos das latitudes e das longitudes, e o `acos()` devolve o ângulo entre os dois pontos. Usei o `constrain(c, -1, 1)` porque o `acos()`só aceita valores entre -1 e 1 e pequenos erros de arredondamento  podiam passar disso.
+Usei a function `distancia(lat1, lon1, lat2, lon2)` para calcular a distância entre dois pontos da terra, em graus, com a fórmula da distância sobre a esfera. O valor `c` é calculado com senos e cossenos das latitudes e das longitudes, e o `acos()` devolve o ângulo entre os dois pontos. Usei o `constrain(c, -1, 1)` porque o `acos()`só aceita valores entre -1 e 1 e pequenos erros de arredondamento  podiam passar disso.
 
 ```javascript
 function distancia(lat1, lon1, lat2, lon2) {
@@ -118,7 +118,7 @@ function distancia(lat1, lon1, lat2, lon2) {
 }
 ```
 
-A function `valorDia(visibilidade)` transforma o estado que a API devolve num número, 1 se for `dayLight` e 0 se for `eclipse` (na sombra da Terra) e 0,5 em qualquer outro caso. Esse número serve para escolher a cor da trajetória.
+Com a function `valorDia(visibilidade)` foi possivel transformar o estado que a API devolve num número, 1 se for `dayLight` e 0 se for `eclipse` (na sombra da Terra) e 0,5 em qualquer outro caso. Esse número serve para escolher a cor da trajetória.
 ```javascript
 function valorDia(visibilidade) {
   if (visibilidade === 'daylight') return 1;
@@ -156,7 +156,7 @@ function juntarTrajetoria(lista, lat, lon, dia) {
 }
 ```
 
-A function `carregarHistorico()` é `async` e pede à API os movimentos das últimas 2 horas, um de 3 em 3 minutos, para desenhar o caminho já feito. Como a API aceita no máximo 10 instantes por pedido, o ciclo exterior faz 4 pedidos (`bloco`de 0 a 3) e o ciclo interior cria 10 instantes em cada 180 segundos entre eles, o que dá 40 pontos. Cada pedido usa o `await fetch(...)` com os instantes separados por vírgulas (`join(',')`), e cada ponto recebido é juntado a uma trajetória à parte, o `historico`. Caso ocorra uma falha no pedido, o `try...catch` evita que o erro interrompa o processo, e a trajetória começa a partir da posição atual. Entre pedidos há uma espera de 1.1 segundos com o `setTimeout`, porque a API só permite cerca de 1 pedido por segundo. Entretanto as posições recolhidas são acrescentadas ao histórico e a `trajetoria` passa a ser o `historico`.
+A function `carregarHistorico()` é `async` e serve para pedir à API os movimentos das últimas 2 horas, um de 3 em 3 minutos, para desenhar o caminho já feito. Como a API aceita no máximo 10 instantes por pedido, o ciclo exterior faz 4 pedidos (`bloco`de 0 a 3) e o ciclo interior cria 10 instantes em cada 180 segundos entre eles, o que dá 40 pontos. Cada pedido usa o `await fetch(...)` com os instantes separados por vírgulas (`join(',')`), e cada ponto recebido é juntado a uma trajetória à parte, o `historico`. Caso ocorra uma falha no pedido, o `try...catch` evita que o erro interrompa o processo, e a trajetória começa a partir da posição atual. Entre pedidos há uma espera de 1.1 segundos com o `setTimeout`, porque a API só permite cerca de 1 pedido por segundo. Entretanto as posições recolhidas são acrescentadas ao histórico e a `trajetoria` passa a ser o `historico`.
 
 ```javascript
 async function carregarHistorico() {
@@ -176,6 +176,23 @@ async function carregarHistorico() {
   }
   for (const p of trajetoria) juntarTrajetoria(historico, p.lat, p.lon, p.dia);
   trajetoria = historico;
+}
+```
+
+Utilizei a function `draw()`, e em seguida a `background()` para atribuir uma cor ao fundo. Em seguida utilizei o `giro += 0.08` para fazer o globo rodar lentamente. Com o `mills()`é possivel ler o tempo para a variável `agora` e calular o `cosInc` e o `sinInc` uma só vez, poupando muitos cálculos. O raio do globo do ecrã é `min(width, height) * 0.38`, ou seja, adapta-se ao tamanho da janela do navegador. Em seguida, desenha-se as estrelas com `desenharEstrelas()`, todos os pontos são percorridos com `desenharPonto()`, desenha a trajetoria com `se
+```javascript
+function draw() {
+  background(5, 7, 15);
+  giro += 0.08;
+  agora = millis();
+  cosInc = cos(inclinacao);
+  sinInc = sin(inclinacao);
+  const raio = min(width, height) * 0.38;
+  desenharEstrelas(raio);
+  for (const p of pontos) desenharPonto(p, raio);
+  desenharTrajetoria(raio);
+  escreverInfo();
+  desenharInfoISS(raio);
 }
 ```
 
