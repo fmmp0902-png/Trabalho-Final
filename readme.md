@@ -127,4 +127,13 @@ function valorDia(visibilidade) {
 }
 ```
 
+A function `vetor(lat, lon)` converte a latitude e a longitude numa posição 3D [x, y, z] numa esfera de raio 1. O x é `cos(lat) * sin(lon)`, o y é `sin(lat) e o z é `cos(lat) * cos(lon).
+
+```javascript
+function vetor(lat, lon) {
+  return [cos(lat) * sin(lon), sin(lat), cos(lat) * cos(lon)];
+}
+```
+
+
 ## Referências
