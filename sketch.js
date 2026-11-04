@@ -89,3 +89,19 @@ function vetor(lat, lon) {
   return [cos(lat) * sin(lon), sin(lat), cos(lat) * cos(lon)];
 }
 
+function juntarTrajetoria(lista, lat, lon, dia) {
+  const ant = lista[lista.length - 1];
+  if (ant) {
+    const passos = ceil(distancia(ant.lat, ant.lon, lat, lon) / 2);
+    const a = vetor(ant.lat, ant.lon);
+    const b = vetor(lat, lon);
+    for (let k = 1; k < passos; k++) {
+      const t = k / passos;
+      const x = lerp(a[0], b[0], t), y = lerp(a[1], b[1], t), z = lerp(a[2], b[2], t);
+      const tamanho = sqrt(x * x + y * y + z * z);
+      lista.push({ lat: asin(y / tamanho), lon: atan2(x, z), dia: lerp(ant.dia, dia, t) });
+    }
+  }
+  lista.push({ lat: lat, lon: lon, dia: dia });
+  if (lista.length > 1500) lista.splice(0, lista.length - 1500);      
+}
