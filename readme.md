@@ -87,6 +87,7 @@ function atualizarISS() {
 }
 ```
 
+A function `issSimulada()` serve para a demonstração funcionar sem internet. A `const fase` é um ângulo que avança com o tempo (`millis () / 1000 * 0,97`, em graus). A latitude é `51,6 * sin(fase)`, por isso a ISS sobe e desce até 51,6 graus de latitude, e a longitude avança com `(fase % 360) - 180`. O tempo é acelerado em relação ao real.
 
 ```javascript
 function issSimulada() {
