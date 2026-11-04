@@ -118,5 +118,13 @@ function distancia(lat1, lon1, lat2, lon2) {
 }
 ```
 
+A function `valorDia(visibilidade)` transforma o estado que a API devolve num número, 1 se for `dayLight` e 0 se for `eclipse` (na sombra da Terra) e 0,5 em qualquer outro caso. Esse número serve para escolher a cor da trajetória.
+```javascript
+function valorDia(visibilidade) {
+  if (visibilidade === 'daylight') return 1;
+  if (visibilidade === 'eclipsed') return 0;
+  return 0.5;
+}
+```
 
 ## Referências
