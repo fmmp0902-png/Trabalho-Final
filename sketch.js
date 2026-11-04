@@ -179,3 +179,11 @@ function desenharEstrelas(raio) {
     ellipse(x, y, e.tam, e.tam);
   }
 }
+
+function projetar(lat, lon, raio) {
+  const x = cos(lat) * sin(lon + giro);
+  const y = -sin(lat);
+  const z = cos(lat) * cos(lon + giro);
+  return { x: width / 2 + x * raio, y: height / 2 + (y * cosInc - z * sinInc) * raio, z: y * sinInc + z * cosInc };
+}
+
