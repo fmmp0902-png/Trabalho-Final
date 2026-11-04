@@ -78,3 +78,10 @@ function distancia(lat1, lon1, lat2, lon2) {
   const c = sin(lat1) * sin(lat2) + cos(lat1) * cos(lat2) * cos(lon1 - lon2);
   return acos(constrain(c, -1, 1));
 }
+
+function valorDia(visibilidade) {
+  if (visibilidade === 'daylight') return 1;
+  if (visibilidade === 'eclipsed') return 0;
+  return 0.5;
+}
+
