@@ -196,4 +196,39 @@ function draw() {
 }
 ```
 
+Para colocar os pontos na terra, utilizei a function `desenharPonto()`, que desenha cada ponto da terra em 5 passos.
+Primeiramente converte-se a latitude e a longitude numa posição 3D numa esfera de raio 1. O `y` é negativo porque o eixo y do ecrã aponta para baixo, o `giro`soma-se á longitude para o globo rodar e o `z` é maior do que 0 zero porque é a metade virada para nós.
+Em seguida, com o `cosInc` e o `sinInc` inclina-se o globo com uma rotação á volta do eixo horizontal e dá os valores `y2`e `z2`. Se o `z2` for menor do que 0, o ponto está atrás do globo e a function termina com `return`, sem o desenhar.
+Utilizei `sin(agora * 0.07 + (p.lat + p.lon) * 2)` para calcular o "pulso", ou seja fazer com que os pontos cresçam e encolham devagar. O `sin()` devolve um valor que oscila entre -1 e 1, e como o tempo (`agora`) não pára de aumentar, o valor sobe e desce sem parar. Para cada ponto começar num momento diferente, somei a latitude e a longitude do ponto `p.lat + p.lon`. Assim, os pontos não pulsam todos ao mesmo tempo e os que estão perto uns dos outros pulsam de forma parecida, o que cria uma onda que passa pelo globo. O tamanho do ponto é o tamanho base do seu tipo multiplicado por `1 + 0.25 * pulso`. Quando o `pulso` é 1, o ponto fica 25% maior, e quando é -1%, fica 25% mais pequenos.
+Os pontos perto da ISS (brilho acima de 0,02) ficam maiores, com uma pulsação mais rápida e a cor passar para a `COR_ISS` com o `lerp()`, que mistura dois valores sendo 0 o primeiro e 1 o segundo.
+Por fim aplico a perspectiva do ponto, ou seja junto á borda do globo onde o `z2` é pequeno, os pontos ficam mais pequenos e transparentes ´tamanho *= (0.4 + 0.6 * z2) * raio / 270` e `fill(r, g, b, 60 + 195 * z2)`. Por fim o `ellipse() desenha o ponto na posição width / 2 + x * raio` e `height / 2 + y2 * raio`.
+
+```javascript
+function desenharPonto(p, raio) {
+
+  const x = cos(p.lat) * sin(p.lon + giro);
+  const y = -sin(p.lat);                         
+  const z = cos(p.lat) * cos(p.lon + giro);      
+
+  const y2 = y * cosInc - z * sinInc;
+  const z2 = y * sinInc + z * cosInc;
+  if (z2 < 0) return;                            
+
+  const pulso = sin(agora * 0.07 + (p.lat + p.lon) * 2);
+  let tamanho = TAMANHO[p.tipo] * (1 + 0.25 * pulso);
+  let [r, g, b] = COR[p.tipo];
+
+  if (p.brilho > 0.02) {
+    tamanho += p.brilho * (6 + 3 * sin(agora * 0.3));
+    r = lerp(r, COR_ISS[0], p.brilho);
+    g = lerp(g, COR_ISS[1], p.brilho);
+    b = lerp(b, COR_ISS[2], p.brilho);
+  }
+
+  tamanho *= (0.4 + 0.6 * z2) * raio / 270;
+  fill(r, g, b, 60 + 195 * z2);
+  ellipse(width / 2 + x * raio, height / 2 + y2 * raio, tamanho, tamanho);
+}
+```
+
 ## Referências
