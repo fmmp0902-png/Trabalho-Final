@@ -377,6 +377,12 @@ Os dados estão divididos em três listas para cada tipo de ponto, o `OCEANO`, `
 [88.9,0.9],[87.7,139.2],[85.4,-86.3]
 ```
 
+## Uso de Inteligência Artificial
+O conceito do projeto final foi concebido por mim com alguma ajuda da Inteligência Artificial para aprimorar certos detalhes. Na concretização do código em p5.js recorri á IA Claude que elaborou a partir da descrição que fiz do resultado pretendido. O mesmo se verificou na geração dos dados dos pontos da Terra, preparados à parte com a sua ajuda.
+O código foi testado ao longo do processo e sujeito a alterações por minha parte, por razões visuais como ajuste de cores, tamanhos e velocidades, e por necessidade de corrigir erros que foram surgindo. Estas intervenções exigiram a compreensão do funcionamento do código, e não apenas a sua utilização. 
+Relativamente ao readme, também foi necessária alguma ajuda do claude. No entanto fiz alterações com o objetivo de tornar as explicações o mais claras possíel, reformulando explicações menos compreensiveis e acrescentando a informação em falta.
+
+
 ## Referências
 [setup()](https://p5js.org/reference/p5/setup/)
 [draw()](https://p5js.org/reference/p5/draw/)
