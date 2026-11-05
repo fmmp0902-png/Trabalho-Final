@@ -1,6 +1,9 @@
 # Trabalho Final
 
 ## Intencionalidade
+O projeto tem como ponto de partida o site wheretheiss.at, que mostra a posição da ISS (International Space Station) em tempo real num mapa em 2D. Decidi transformar a informação que o website nos fornece mas em 3D. Assim criei um globo terrestre que se pode rodar e inclinar com o rato, para observar o local e a trajetória da ISS.
+Na construção visual inspirei-me no pontilhismo, que está presente nas fronteiras dos países, oceanos e no local da ISS, onde os pontos são maiores e mudam de cor. A Terra é formada por pontos que pulsam lentamente, e a passagem da ISS acende-os e deixa um rasto que se vai apagando.
+No fundo a intenção foi transformar algo bidimensional numa experiência interativa, criativa e, ao mesmo tempo, informativa.
 
 ## Processo
 Comecei por definir as constantes que se podem alterar para mudar o aspeto do projeto. A `const COR` guarda as três cores dos pontos (mar, terra e fronteiras) e a `const TAMANHO`guarda o diâmetro dos diferentes pontos (1.6 para o mar, 2.4 para a terra e 3.6 paras as fronteiras). A `const COR_ISS` é referente á cor dos pontos perto da ISS e a `const RAIO_ISS` define até que distância da ISS os pontos da Terra são destacados, no caso 9 graus. A `const DURACAO_RASTO` controla o tamanho do resto, sendo que perto de 1 o rasto é longo e perto de 0 é curto. A `const COR_DIA` e a `const COR_NOITE` são as cores do rasto que indicam que parte da terra está dia e noite, e a `const N_ESTRELAS` é o número de estrelas do fundo.
