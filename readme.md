@@ -242,4 +242,19 @@ function criarEstrelas() {
 }
 ```
 
+Para desenhar as estrelas, converti a posição de cada uma para píxeis. Com o `dist()`, verifiquei se a estrela está dentro do globo e, se estiver, saltei-a com o `continue`, porque a Terra tapa as estrelas. As outras são desenhadas com o `ellipse()`. A opacidade das estrelas muda com o `sin(agora * 0.05 + e.false)` e, como cada estrela tem uma fase diferente, cintilam em momentos diferentes. 
+
+```javascript
+function desenharEstrelas(raio) {
+  for (const e of estrelas) {
+    const x = e.x * width;
+    const y = e.y * height;
+    if (dist(x, y, width / 2, height / 2) < raio) continue;
+    fill(210, 220, 255, 120 + 100 * sin(agora * 0.05 + e.fase));
+    ellipse(x, y, e.tam, e.tam);
+  }
+}
+```
+
+
 ## Referências
