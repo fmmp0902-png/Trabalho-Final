@@ -179,7 +179,8 @@ async function carregarHistorico() {
 }
 ```
 
-Utilizei a function `draw()`, e em seguida a `background()` para atribuir uma cor ao fundo. Em seguida utilizei o `giro += 0.08` para fazer o globo rodar lentamente. Com o `mills()`é possivel ler o tempo para a variável `agora` e calular o `cosInc` e o `sinInc` uma só vez, poupando muitos cálculos. O raio do globo do ecrã é `min(width, height) * 0.38`, ou seja, adapta-se ao tamanho da janela do navegador. Em seguida, desenha-se as estrelas com `desenharEstrelas()`, todos os pontos são percorridos com `desenharPonto()`, desenha a trajetoria com `se
+Utilizei a function `draw()`, e em seguida a `background()` para atribuir uma cor ao fundo. Em seguida utilizei o `giro += 0.08` para fazer o globo rodar lentamente. Com o `mills()`é possivel ler o tempo para a variável `agora` e calular o `cosInc` e o `sinInc` uma só vez, poupando muitos cálculos. O raio do globo do ecrã é `min(width, height) * 0.38`, ou seja, adapta-se ao tamanho da janela do navegador. Em seguida, desenha-se as estrelas com `desenharEstrelas()`, todos os pontos são percorridos com `desenharPonto()`, desenha-se a trajetoria com `desenharTrajetoria`, escre-se a lista com a infomação com `escreverInfo()` e, por último utilizo `desenharInfoISS(raio), para que a caixa que aparece quando o cursor passa por cima da ISS ficar por cima de tudo.
+
 ```javascript
 function draw() {
   background(5, 7, 15);
