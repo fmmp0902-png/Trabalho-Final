@@ -267,5 +267,38 @@ function projetar(lat, lon, raio) {
 }
 ```
 
+Para desenhar o rasto luminoso da ISS, usei a function `desenharTrajetoria()` que, se a trajetória tiver a menos de 2 pontos, não faz nada. Com o `map()`e a `projetar()` converti todos os pontos para o ecrã, e com o `blendMode()` ativo soma a luz das camadas que se sobrepõem, deixando as zonas mais claras e criando o efeito de brilho. A linha é desenhada 3 vezes, uma por cima da outra, com larguras e opacidades diferentes (`[4, 0.1], [1.7, 0.3], [0.6, 1]`), o que forma um halo largo, um halo médio e um núcleo fino.
+
+```javascript
+function desenharTrajetoria(raio) {
+  const n = trajetoria.length;
+  if (n < 2) return;
+  const escala = raio / 270;
+  const pts = trajetoria.map(p => projetar(p.lat, p.lon, raio));
+  blendMode(ADD);                                  
+  for (const [largura, opacidade] of [[4, 0.1], [1.7, 0.3], [0.6, 1]]) {
+    for (let i = 1; i < n; i++) {
+      if (pts[i - 1].z < 0 || pts[i].z < 0) continue;           
+      const idade = i / (n - 1);                                 
+      const d = trajetoria[i].dia;                               
+      stroke(lerp(COR_NOITE[0], COR_DIA[0], d), lerp(COR_NOITE[1], COR_DIA[1], d), lerp(COR_NOITE[2], COR_DIA[2], d),
+             255 * pow(idade, 1.2) * opacidade);                
+      strokeWeight((1.5 + 3 * idade) * largura * escala);        
+      line(pts[i - 1].x, pts[i - 1].y, pts[i].x, pts[i].y);
+    }
+  }
+  noStroke();
+  const cabeca = pts[n - 1];                             
+  if (cabeca.z > 0) {
+    const pulso = 1 + 0.2 * sin(agora * 0.3);
+    fill(255, 190, 110, 60);
+    ellipse(cabeca.x, cabeca.y, 18 * escala * pulso, 18 * escala * pulso);
+    fill(255, 245, 225);
+    ellipse(cabeca.x, cabeca.y, 5 * escala, 5 * escala);                    
+  }
+  blendMode(BLEND);
+}
+```
+
 
 ## Referências
