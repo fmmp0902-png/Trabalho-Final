@@ -366,4 +366,15 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
 ```
+
+## Dados dos pontos
+Para os dados dos pontos, da terra, oceano e fronteiras utilizei a inteligência artificial Claude (Anthropic) para me ajudar a gerá-los. Assim, a AI desenhou e calculou os pontos, e eu coloquei os resultados no fim do `sketch.js`. Por ser um bloco muito grande e que não se altera, deizei-o no fim, depois de todas as functions.
+Os dados estão divididos em três listas para cada tipo de ponto, o `OCEANO`, `TERRA` e `FRONTEIRAS`. Cada lista é uma sequência de pares `[latitude, longitude]`, em graus, e cada par é um ponto da Terra.
+
+ Assim sendo, o primeiro número é a latitude e vai de -90 a 90, os valores positivos são a norte do equador e os negativos a sul. A longitude é o segundo número e vai de -180 a 180, os valores positivos são a este do meridiano de Greenwich e os negativos a oeste. O mar e a terra foram criados com uma rede uniforme de pontos, uma esprial de Fibonacci, que espalha os pontos de forma regular pela esfera. Depois, essa rede foi filtrada com uma máscara de terra do Natural Earth. Os pontos que caem em terra foram para a lista `TERRA` e os que caem no mar foram para a lista `OCEANO`. As fronteiras, que incluem as costas, são pontos colocados a distâncias iguais ao longo das linhas do Natural Earth. No código, a function `criarPontos()` chama a `adicionar()` para cada uma destas linhas, e é aí que cada par `[latitude, longitude]` se transforma num ponto que é desenhado no globo.
+
+```javascript
+[88.9,0.9],[87.7,139.2],[85.4,-86.3]
+```
+
 ## Referências
