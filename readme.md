@@ -256,5 +256,16 @@ function desenharEstrelas(raio) {
 }
 ```
 
+Com a function `projetar()`, transformei a latitude e a longitude de um ponto na sua posição no ecrã, com a mesma projeção da `desenharPonto()`, mas para ser usada na trajetória. Devolve o `x`e o `y` no ecrã e também o `z`, que indica se o ponto está virado para nós (`z` maior do que 0) ou atrás do globo.
+
+```javascript
+function projetar(lat, lon, raio) {
+  const x = cos(lat) * sin(lon + giro);
+  const y = -sin(lat);
+  const z = cos(lat) * cos(lon + giro);
+  return { x: width / 2 + x * raio, y: height / 2 + (y * cosInc - z * sinInc) * raio, z: y * sinInc + z * cosInc };
+}
+```
+
 
 ## Referências
