@@ -127,7 +127,7 @@ function valorDia(visibilidade) {
 }
 ```
 
-A function `vetor(lat, lon)` converte a latitude e a longitude numa posição 3D [x, y, z] numa esfera de raio 1. O x é `cos(lat) * sin(lon)`, o y é `sin(lat) e o z é `cos(lat) * cos(lon).
+A function `vetor(lat, lon)` converte a latitude e a longitude numa posição 3D [x, y, z] numa esfera de raio 1. O x é `cos(lat) * sin(lon)`, o y é `sin(lat)` e o z é `cos(lat) * cos(lon)`.
 
 ```javascript
 function vetor(lat, lon) {
@@ -135,7 +135,7 @@ function vetor(lat, lon) {
 }
 ```
 
-A `juntarTrajetoria(lista, lat, lon, dia)` junta uma posição á trajetória. Se a nova posição ficar longe da anterior, preenche o caminho com pontos intermédios, o número de passos é a distância dividida por 2 e arredondada para cima com o `ceil()``, ou seja, um ponto por cada 2 graus. Cada ponto intermédio é calculado com o `lerp()` aplicado a x, y e z de `vetor()`, e depois volta a ser posto na superfície da esfera, dividindo pelo comprimento do vetor (`tamanho`, calculado com `sqrt()`). A latitude e a longitude são recuperados com `asin()` e `atan2()`. O valor de dia também é misturado com o `lerp()`, para a cor mudar de forma grafualmente. No fim, o `splice()` mantém só as 1500 posições mais recentes.
+A `juntarTrajetoria(lista, lat, lon, dia)` junta uma posição á trajetória. Se a nova posição ficar longe da anterior, preenche o caminho com pontos intermédios, o número de passos é a distância dividida por 2 e arredondada para cima com o `ceil()`, ou seja, um ponto por cada 2 graus. Cada ponto intermédio é calculado com o `lerp()` aplicado a x, y e z de `vetor()`, e depois volta a ser posto na superfície da esfera, dividindo pelo comprimento do vetor (`tamanho`, calculado com `sqrt()`). A latitude e a longitude são recuperados com `asin()` e `atan2()`. O valor de dia também é misturado com o `lerp()`, para a cor mudar de forma grafualmente. No fim, o `splice()` mantém só as 1500 posições mais recentes.
 
 ```javascript
 function juntarTrajetoria(lista, lat, lon, dia) {
@@ -202,7 +202,7 @@ Primeiramente converte-se a latitude e a longitude numa posição 3D numa esfera
 Em seguida, com o `cosInc` e o `sinInc` inclina-se o globo com uma rotação á volta do eixo horizontal e dá os valores `y2`e `z2`. Se o `z2` for menor do que 0, o ponto está atrás do globo e a function termina com `return`, sem o desenhar.
 Utilizei `sin(agora * 0.07 + (p.lat + p.lon) * 2)` para calcular o "pulso", ou seja fazer com que os pontos cresçam e encolham devagar. O `sin()` devolve um valor que oscila entre -1 e 1, e como o tempo (`agora`) não pára de aumentar, o valor sobe e desce sem parar. Para cada ponto começar num momento diferente, somei a latitude e a longitude do ponto `p.lat + p.lon`. Assim, os pontos não pulsam todos ao mesmo tempo e os que estão perto uns dos outros pulsam de forma parecida, o que cria uma onda que passa pelo globo. O tamanho do ponto é o tamanho base do seu tipo multiplicado por `1 + 0.25 * pulso`. Quando o `pulso` é 1, o ponto fica 25% maior, e quando é -1%, fica 25% mais pequenos.
 Os pontos perto da ISS (brilho acima de 0,02) ficam maiores, com uma pulsação mais rápida e a cor passar para a `COR_ISS` com o `lerp()`, que mistura dois valores sendo 0 o primeiro e 1 o segundo.
-Por fim aplico a perspectiva do ponto, ou seja junto á borda do globo onde o `z2` é pequeno, os pontos ficam mais pequenos e transparentes ´tamanho *= (0.4 + 0.6 * z2) * raio / 270` e `fill(r, g, b, 60 + 195 * z2)`. Por fim o `ellipse() desenha o ponto na posição width / 2 + x * raio` e `height / 2 + y2 * raio`.
+Por fim aplico a perspectiva do ponto, ou seja junto á borda do globo onde o `z2` é pequeno, os pontos ficam mais pequenos e transparentes `tamanho *= (0.4 + 0.6 * z2) * raio / 270` e `fill(r, g, b, 60 + 195 * z2)`. Por fim o `ellipse()` desenha o ponto na posição `width / 2 + x * raio` e `height / 2 + y2 * raio`.
 
 ```javascript
 function desenharPonto(p, raio) {
@@ -232,7 +232,7 @@ function desenharPonto(p, raio) {
 }
 ```
 
-Para criar as estrelas utilizei a function `criar Estrelas(). Usei um ciclo `for` para criar tantas estrelas como o valor de `N_ESTRELAS` e, em cada volta, guarda uma estrela com 4 valores escolhidos ao acaso com o `random()`, a posição `x`e `y`, o tamanho ()`random(0.8, 2.2)`) e uma fase (`random(360)`). A posição fica guardada como fração do ecrã, de 0 a 1, e não em píxeis, por isso as estrelas ajustam-se se a janela mudar de tamanho.
+Para criar as estrelas utilizei a function `criar Estrelas()`. Usei um ciclo `for` para criar tantas estrelas como o valor de `N_ESTRELAS` e, em cada volta, guarda uma estrela com 4 valores escolhidos ao acaso com o `random()`, a posição `x`e `y`, o tamanho `random(0.8, 2.2)` e uma fase `random(360)`. A posição fica guardada como fração do ecrã, de 0 a 1, e não em píxeis, por isso as estrelas ajustam-se se a janela mudar de tamanho.
 
 ```javascript
 function criarEstrelas() {
@@ -332,7 +332,7 @@ function linhasInfo() {
 }
 ```
 
-Para desenhar a caixa que aparece ao passar com o cursor na ISS, utilizei a function `desenharInfoISS()`. Primeiramente, com o `projetar()``, calculei onde a ISS está no ecrã e termina logo com o `return` se a ISS estiver atrás do globo (`p.z < 0`) ou se o rato estiver a mais de 20 píxeis dela, medido com o `dist()`. Depois para pedir as linhas, utilizei as `linhasInfo()` calculei o tamanho da caixa, com 190 píxeis de largura e 20 pixeis de altura por linha, mais uma pequena margem. A caixa aparece junto ao rato, a 18 píxeis, e o `min()` impede que saia do ecrã. A o retângulo que se encontra no fundo da caixa de texto é desenhada com o `rect()`, com os cantos arredondados e um fundo escuro semitransparente, e o texto é escrito por cima, linha a linha, com o `text()`.
+Para desenhar a caixa que aparece ao passar com o cursor na ISS, utilizei a function `desenharInfoISS()`. Primeiramente, com o `projetar()`, calculei onde a ISS está no ecrã e termina logo com o `return` se a ISS estiver atrás do globo (`p.z < 0`) ou se o rato estiver a mais de 20 píxeis dela, medido com o `dist()`. Depois para pedir as linhas, utilizei as `linhasInfo()` calculei o tamanho da caixa, com 190 píxeis de largura e 20 pixeis de altura por linha, mais uma pequena margem. A caixa aparece junto ao rato, a 18 píxeis, e o `min()` impede que saia do ecrã. O retângulo que se encontra no fundo da caixa de texto é desenhada com o `rect()`, com os cantos arredondados e um fundo escuro semitransparente, e o texto é escrito por cima, linha a linha, com o `text()`.
 
 ```javascript
 function desenharInfoISS(raio) {
