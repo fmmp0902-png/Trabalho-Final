@@ -311,4 +311,43 @@ function escreverInfo() {
 }
 ```
 
+As `linhasInfo()`devolve as linhas de texto com a informação da ISS. Serve tanto a caixa de texto do canto esquerdo como a caixa de texto que aparece com o cursor sobre o local da ISS, por isso o texto está escrito num só sítio. Se não houver dados da API (`dadosISS` é `null`), mostra só a latitude e a longitude simuladas, formatadas com o `nf(), e o aviso `(posição simulada)`. Caso contrário, mostra 6 linhas sendo elas a hora, a altitude em km, a velocidade em km/h, a latitude e a longitude em graus e se a ISS está de dia ou de noite. A hora vem do `timestamp` da API, que está em segundo, por isso multipliquei por 1000 para criar um `Date` e escrevi-a com o `toLocaleTimeString('pt-PT')`. O `Number.isFinite()` verifica se o `timestamp` é um número válido e, se não for, usa a hora atual (`Date.now() / 1000`), para nunca aparecer "Invalid Date". A linha do dia e da noite depende do campo `visibility`, se for `eclipsed`, a ISS está de noite e, em qualquer outro caso, está de dia.
+
+```javascript
+function linhasInfo() {
+  if (!dadosISS) {
+    return ['Latitude: ' + nf(issLat, 1, 2) + '°', 'Longitude: ' + nf(issLon, 1, 2) + '°', '(posição simulada)'];
+  }
+  const d = dadosISS;
+  const segundos = Number.isFinite(d.timestamp) ? d.timestamp : Date.now() / 1000;
+  const hora = new Date(segundos * 1000).toLocaleTimeString('pt-PT');
+  return [
+    'Hora: ' + hora,
+    'Altitude: ' + nf(d.altitude, 1, 2) + ' km',
+    'Velocidade: ' + nf(d.velocity, 1, 2) + ' km/h',
+    'Latitude: ' + nf(d.latitude, 1, 4) + '°',
+    'Longitude: ' + nf(d.longitude, 1, 4) + '°',
+    d.visibility === 'eclipsed' ? 'A ISS está de noite' : 'A ISS está de dia'
+  ];
+}
+```
+
+Para desenhar a caixa que aparece ao passar com o cursor na ISS, utilizei a function `desenharInfoISS()`. Primeiramente, com o `projetar()``, calculei onde a ISS está no ecrã e termina logo com o `return` se a ISS estiver atrás do globo (`p.z < 0`) ou se o rato estiver a mais de 20 píxeis dela, medido com o `dist()`. Depois para pedir as linhas, utilizei as `linhasInfo()` calculei o tamanho da caixa, com 190 píxeis de largura e 20 pixeis de altura por linha, mais uma pequena margem. A caixa aparece junto ao rato, a 18 píxeis, e o `min()` impede que saia do ecrã. A o retângulo que se encontra no fundo da caixa de texto é desenhada com o `rect()`, com os cantos arredondados e um fundo escuro semitransparente, e o texto é escrito por cima, linha a linha, com o `text()`.
+
+```javascript
+function desenharInfoISS(raio) {
+  const p = projetar(issLat, issLon, raio);
+  if (p.z < 0 || dist(mouseX, mouseY, p.x, p.y) > 20) return;
+  const linhas = linhasInfo();
+  const w = 190, h = linhas.length * 20 + 16;
+  const x = min(mouseX + 18, width - w - 10);
+  const y = min(mouseY + 18, height - h - 10);
+  fill(10, 15, 30, 220);
+  rect(x, y, w, h, 6);
+  fill(220, 230, 255);
+  textSize(13);
+  for (let i = 0; i < linhas.length; i++) text(linhas[i], x + 12, y + 22 + i * 20);
+}
+
+```
 ## Referências
