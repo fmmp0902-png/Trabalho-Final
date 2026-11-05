@@ -348,6 +348,14 @@ function desenharInfoISS(raio) {
   textSize(13);
   for (let i = 0; i < linhas.length; i++) text(linhas[i], x + 12, y + 22 + i * 20);
 }
+```
 
+Utilizei a function `mouseDragged()` para mudar a posição do globo ao arrastar o rato. O movimento na horizontal (`mouseX - pmouseX`) soma-se ao `giro` e faz o globo rodar. O movimento na vertical (`mouseY - pmouseY`) altera a `inclinacao`, que o `constrain()` limita entre -80 e 80 graus.
+
+```javascript
+function mouseDragged() {
+  giro += (mouseX - pmouseX) * 0.4;
+  inclinacao = constrain(inclinacao - (mouseY - pmouseY) * 0.3, -80, 80);
+}
 ```
 ## Referências
