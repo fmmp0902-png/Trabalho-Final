@@ -300,5 +300,15 @@ function desenharTrajetoria(raio) {
 }
 ```
 
+Para escrever a informação da ISS que se encontra no canto inferior esquerdo, usei a function `escreverInfor()`. Em seguida pedi as linhas de texto à `linhasInfo()` e, com um ciclo `for`, escreve-as com o `text()`, de baixo para cima, com 20 píxeis de distância entre cada uma
+
+```javascript
+function escreverInfo() {
+  fill(200, 215, 255);
+  textSize(13);
+  const estado = issReal ? '' : '  (posição simulada)';
+  text('ISS · latitude ' + nf(issLat, 1, 2) + '° · longitude ' + nf(issLon, 1, 2) + '°' + estado, 24, height - 24);
+}
+```
 
 ## Referências
