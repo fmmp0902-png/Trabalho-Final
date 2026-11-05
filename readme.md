@@ -358,4 +358,12 @@ function mouseDragged() {
   inclinacao = constrain(inclinacao - (mouseY - pmouseY) * 0.3, -80, 80);
 }
 ```
+
+Para que a janela mude de tamanho, utilizei a function `windowResized()` e em seguida o `resizeCanvas(windowWidth, windowHeight)` para ajustar a área de desenho.
+
+```javascript
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
+```
 ## Referências
