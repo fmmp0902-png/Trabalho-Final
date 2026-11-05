@@ -197,7 +197,7 @@ function draw() {
 }
 ```
 
-Para colocar os pontos na terra, utilizei a function `desenharPonto()`, que desenha cada ponto da terra em 5 passos.
+Para colocar os pontos na terra, utilizei a function `desenharPonto()`, que desenha cada ponto da terra.
 Primeiramente converte-se a latitude e a longitude numa posição 3D numa esfera de raio 1. O `y` é negativo porque o eixo y do ecrã aponta para baixo, o `giro`soma-se á longitude para o globo rodar e o `z` é maior do que 0 zero porque é a metade virada para nós.
 Em seguida, com o `cosInc` e o `sinInc` inclina-se o globo com uma rotação á volta do eixo horizontal e dá os valores `y2`e `z2`. Se o `z2` for menor do que 0, o ponto está atrás do globo e a function termina com `return`, sem o desenhar.
 Utilizei `sin(agora * 0.07 + (p.lat + p.lon) * 2)` para calcular o "pulso", ou seja fazer com que os pontos cresçam e encolham devagar. O `sin()` devolve um valor que oscila entre -1 e 1, e como o tempo (`agora`) não pára de aumentar, o valor sobe e desce sem parar. Para cada ponto começar num momento diferente, somei a latitude e a longitude do ponto `p.lat + p.lon`. Assim, os pontos não pulsam todos ao mesmo tempo e os que estão perto uns dos outros pulsam de forma parecida, o que cria uma onda que passa pelo globo. O tamanho do ponto é o tamanho base do seu tipo multiplicado por `1 + 0.25 * pulso`. Quando o `pulso` é 1, o ponto fica 25% maior, e quando é -1%, fica 25% mais pequenos.
@@ -229,6 +229,16 @@ function desenharPonto(p, raio) {
   tamanho *= (0.4 + 0.6 * z2) * raio / 270;
   fill(r, g, b, 60 + 195 * z2);
   ellipse(width / 2 + x * raio, height / 2 + y2 * raio, tamanho, tamanho);
+}
+```
+
+Para criar as estrelas utilizei a function `criar Estrelas(). Usei um ciclo `for` para criar tantas estrelas como o valor de `N_ESTRELAS` e, em cada volta, guarda uma estrela com 4 valores escolhidos ao acaso com o `random()`, a posição `x`e `y`, o tamanho ()`random(0.8, 2.2)`) e uma fase (`random(360)`). A posição fica guardada como fração do ecrã, de 0 a 1, e não em píxeis, por isso as estrelas ajustam-se se a janela mudar de tamanho.
+
+```javascript
+function criarEstrelas() {
+  for (let i = 0; i < N_ESTRELAS; i++) {
+    estrelas.push({ x: random(), y: random(), tam: random(0.8, 2.2), fase: random(360) });
+  }
 }
 ```
 
